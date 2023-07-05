@@ -2,7 +2,7 @@ import requests
 import json
 import copy
 
-from extras import HTTPRequest, KeystrokesEvent, NavigateEvent, CookieEvent, JavaScriptEvent, SelectOptionEvent, InteractionEvent, HTTPScript, BrowserScript
+from dtsynthetic.extras import HTTPRequest, KeystrokesEvent, NavigateEvent, CookieEvent, JavaScriptEvent, SelectOptionEvent, InteractionEvent, HTTPScript, BrowserScript
 
 class DraftHTTPMonitor:
     def __init__(self, data:dict, request_data:dict):

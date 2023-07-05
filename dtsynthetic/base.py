@@ -2,7 +2,7 @@ import requests
 import json
 import re
 
-from monitors import HTTPMonitor, BrowserMonitor, DraftHTTPMonitor, DraftBrowserMonitor
+from dtsynthetic.monitors import HTTPMonitor, BrowserMonitor, DraftHTTPMonitor, DraftBrowserMonitor
 
 class SyntheticAPI:
 
