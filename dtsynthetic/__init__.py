@@ -1,1 +1,1 @@
-from base import SyntheticAPI
+from dtsynthetic.base import SyntheticAPI
