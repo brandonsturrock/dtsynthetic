@@ -10,7 +10,6 @@ setup(
   url = 'https://github.com/brandonsturrock/dtsynthetic',   # Provide either the link to your github or to your website
   install_requires=[            # I get to this in a second
           'requests',
-          'json',
           're',
           'copy'
       ],
