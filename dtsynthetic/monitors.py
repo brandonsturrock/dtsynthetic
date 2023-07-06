@@ -228,17 +228,19 @@ class BrowserMonitor:
     def entityId(self):
         return self.__entityId
     
-    def enable(self):
+    def enable(self, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         if not hasattr(self, 'script'): raise Exception('Call get_details() before attempting to edit a script')
         self.enabled = True
-        return self.update()
+        if update:
+            return self.update()
 
-    def disable(self):
+    def disable(self, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         if not hasattr(self, 'script'): raise Exception('Call get_details() before attempting to edit a script')
         self.enabled = False
-        return self.update()
+        if update:
+            return self.update()
     
     def execute(self, params={}):
         url = self._request_data['tenant'] + f'/api/v2/synthetic/executions/batch'
