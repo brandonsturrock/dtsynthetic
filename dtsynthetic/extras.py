@@ -5,13 +5,14 @@ class HTTPRequest:
             self.description = request['description']
             self.url = request['url']
             self.method = request['method']
+            if 'requestBody' in request: self.requestBody = request['requestBody']
             self.validation = request['validation'] if 'validation' in request else None
             self.configuration = request['configuration'] if 'configuration' in request else None
             self.preProcessingScript = request['preProcessingScript'] if 'preProcessingScript' in request else ""
             self.postProcessingScript = request['__postProcessingScript'] if '__postProcessingScript' in request else ""
 
         def data(self):
-            return {
+            body = {
                 'description' : self.description,
                 'url' : self.url,
                 'method' : self.method,
@@ -20,6 +21,8 @@ class HTTPRequest:
                 'preProcessingScript' : self.preProcessingScript,
                 'postProcessingScript' : self.postProcessingScript
             }
+            if hasattr(self,'requestBody'):
+                body['requestBody'] = self.requestBody
 
 class NavigateEvent:
     def __init__(self, event):
