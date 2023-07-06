@@ -23,6 +23,7 @@ class SyntheticAPI:
         monitors = []
         for index, row in df.iterrows():
             body_check = row['Request Body']
+            print(body_check)
             if pd.isnull(body_check):
                 request_body = body_check
             else:
