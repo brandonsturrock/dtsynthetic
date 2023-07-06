@@ -342,10 +342,10 @@ class BrowserMonitor:
                     tag_already_exists = True
 
         if not tag_already_exists and type(tag)==dict:
-            self.tags.append({'key' : search_key, 'value' : tag['search_key']})
+            self.tags.append({'key' : search_key, 'value' : tag[search_key]})
         else:
             self.tags.append({'key' : search_key})
-            
+
         if update:
             return self.update()
 
