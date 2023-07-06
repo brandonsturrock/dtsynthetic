@@ -28,6 +28,13 @@ class SyntheticAPI:
             else:
                 request_body = body_check
 
+            tags = []
+            if len(row) > 9:
+                i = 9
+                while i < len(row):
+                    tags.append({'key' : df.columns[i],'value' : df.iloc[index,i]})
+                    i+=1
+
             if row['Type']=='HTTP':
                 body = {
                     "name": row['Monitor Name'],
@@ -52,7 +59,7 @@ class SyntheticAPI:
                         ]
                     },
                     "locations": row['Locations'].split(','),
-                    "tags": [{'key':'brandon_testing'}],
+                    "tags": tags,
                     "manuallyAssignedApps" : []
                 }
                 if body['script']['requests'][0]['requestBody'] is None:
