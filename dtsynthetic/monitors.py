@@ -136,28 +136,30 @@ class HTTPMonitor:
             search_key = tag
 
         for x in self.tags:
-            if type(x) == str:
-                if search_key == x:
-                    tag_already_exists = True
-            elif type(x) == dict:
-                if search_key in x:
+            if search_key == x['key']:
                     tag_already_exists = True
 
-        if not tag_already_exists:
-            self.tags.append(tag)
+        if not tag_already_exists and type(tag)==dict:
+            self.tags.append({'key' : search_key, 'value' : tag[search_key]})
+        else:
+            self.tags.append({'key' : search_key})
 
         if update:
             return self.update()
 
     def remove_tag(self, tag_key, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
+        
+        if type(tag_key) == dict:
+            search_key = ''
+            for key in tag_key:
+                search_key = key
+        elif type(tag_key) == str:
+            search_key = tag_key
+
         for x in self.tags:
-            if type(x) == str:
-                if tag_key == x:
-                    self.tags.remove(x)
-            elif type(x) == dict:
-                if tag_key in x:
-                    self.tags.remove(x)
+            if search_key == x['key']:
+                self.tags.remove(x)
         if update:
             return self.update()
     
@@ -351,12 +353,16 @@ class BrowserMonitor:
 
     def remove_tag(self, tag_key, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
+        
+        if type(tag_key) == dict:
+            search_key = ''
+            for key in tag_key:
+                search_key = key
+        elif type(tag_key) == str:
+            search_key = tag_key
+
         for x in self.tags:
-            if type(x) == str:
-                if tag_key == x:
-                    self.tags.remove(x)
-            elif type(x) == dict:
-                if tag_key in x:
-                    self.tags.remove(x)
+            if search_key == x['key']:
+                self.tags.remove(x)
         if update:
             return self.update()
