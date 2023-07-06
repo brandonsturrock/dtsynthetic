@@ -35,7 +35,7 @@ class SyntheticAPI:
                             "description": row['Description'] if 'Description' in df else row['URL'],
                             "url": row['URL'],
                             "method": row['Method'],
-                            "requestBody": row['Request Body'] if 'Request Body' in df else '',
+                            "requestBody": row['Request Body'] if 'Request Body' in df else None,
                             "configuration": {
                                 "acceptAnyCertificate": True,
                                 "followRedirects": True
@@ -49,6 +49,9 @@ class SyntheticAPI:
                     "tags": [],
                     "manuallyAssignedApps" : []
                 }
+                if body['script']['requests'][0]['requestBody'] is None:
+                    del body['script']['requests'][0]['requestBody']
+                    
                 monitors.append(DraftHTTPMonitor(data=body, request_data={'tenant' : self.tenant, 'api_key':self.api_key, 'headers' : self.__headers}))
         return monitors
 
