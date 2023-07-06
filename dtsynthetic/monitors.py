@@ -135,11 +135,11 @@ class HTTPMonitor:
 
         for x in self.tags:
             if search_key == x['key']:
-                    tag_already_exists = True
+                tag_already_exists = True
 
         if not tag_already_exists and type(tag)==dict:
             self.tags.append({'key' : search_key, 'value' : tag[search_key]})
-        else:
+        elif not tag_already_exists:
             self.tags.append({'key' : search_key})
 
         if update:
@@ -341,7 +341,7 @@ class BrowserMonitor:
 
         if not tag_already_exists and type(tag)==dict:
             self.tags.append({'key' : search_key, 'value' : tag[search_key]})
-        else:
+        elif not tag_already_exists:
             self.tags.append({'key' : search_key})
 
         if update:
