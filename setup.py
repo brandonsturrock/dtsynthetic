@@ -3,12 +3,13 @@ from distutils.core import setup
 setup(
   name = 'dtsynthetic',
   packages = ['dtsynthetic'],
-  version = '0.2.13',
+  version = '0.2.15',
   description = 'Wrapper for the Dynatrace Synthetic API',
   author = 'Brandon Sturrock',
   author_email = 'brandon.sturrock@dynatrace.com',
   url = 'https://github.com/brandonsturrock/dtsynthetic',
   install_requires=[
-          'requests'
+          'requests',
+          'pandas'
       ],
 )
