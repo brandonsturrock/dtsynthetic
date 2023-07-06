@@ -135,40 +135,27 @@ class HTTPMonitor:
                 return True      
         return False  
     
-    def add_tag(self, tag, update=False):
+    def add_tag(self, key, value:None, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
-        if type(tag) == dict:
-            search_key = ''
-            for key in tag:
-                search_key = key
-        elif type(tag) == str:
-            search_key = tag
 
         for x in self.tags:
-            if search_key == x['key']:
+            if key == x['key']:
                 tag_already_exists = True
 
-        if not tag_already_exists and type(tag)==dict:
-            self.tags.append({'key' : search_key, 'value' : tag[search_key]})
+        if not tag_already_exists and value:
+            self.tags.append({'key' : key, 'value' : value})
         elif not tag_already_exists:
-            self.tags.append({'key' : search_key})
+            self.tags.append({'key' : key})
 
         if update:
             return self.update()
 
-    def remove_tag(self, tag_key, update=False):
+    def remove_tag(self, key, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
-        
-        if type(tag_key) == dict:
-            search_key = ''
-            for key in tag_key:
-                search_key = key
-        elif type(tag_key) == str:
-            search_key = tag_key
 
         for x in self.tags:
-            if search_key == x['key']:
+            if key == x['key']:
                 self.tags.remove(x)
         if update:
             return self.update()
@@ -350,40 +337,27 @@ class BrowserMonitor:
                 return True      
         return False  
     
-    def add_tag(self, tag, update=False):
+    def add_tag(self, key, value:None, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
-        if type(tag) == dict:
-            search_key = ''
-            for key in tag:
-                search_key = key
-        elif type(tag) == str:
-            search_key = tag
 
         for x in self.tags:
-            if search_key == x['key']:
-                    tag_already_exists = True
+            if key == x['key']:
+                tag_already_exists = True
 
-        if not tag_already_exists and type(tag)==dict:
-            self.tags.append({'key' : search_key, 'value' : tag[search_key]})
+        if not tag_already_exists and value:
+            self.tags.append({'key' : key, 'value' : value})
         elif not tag_already_exists:
-            self.tags.append({'key' : search_key})
+            self.tags.append({'key' : key})
 
         if update:
             return self.update()
 
-    def remove_tag(self, tag_key, update=False):
+    def remove_tag(self, key, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
-        
-        if type(tag_key) == dict:
-            search_key = ''
-            for key in tag_key:
-                search_key = key
-        elif type(tag_key) == str:
-            search_key = tag_key
 
         for x in self.tags:
-            if search_key == x['key']:
+            if key == x['key']:
                 self.tags.remove(x)
         if update:
             return self.update()
