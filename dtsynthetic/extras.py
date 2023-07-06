@@ -23,6 +23,7 @@ class HTTPRequest:
             }
             if hasattr(self,'requestBody'):
                 body['requestBody'] = self.requestBody
+            return body
 
 class NavigateEvent:
     def __init__(self, event):
