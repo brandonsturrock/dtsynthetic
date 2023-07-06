@@ -36,7 +36,7 @@ class SyntheticAPI:
                             "description": row['Description'] if 'Description' in df else row['URL'],
                             "url": row['URL'],
                             "method": row['Method'],
-                            "requestBody": row['Request Body'] if 'Request Body' !='' else None,
+                            "requestBody": row['Request Body'] if not pd.isnull(df[index]['Request Body']) else None,
                             "configuration": {
                                 "acceptAnyCertificate": True,
                                 "followRedirects": True
