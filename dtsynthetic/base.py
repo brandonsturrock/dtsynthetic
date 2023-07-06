@@ -19,7 +19,7 @@ class SyntheticAPI:
             return DraftBrowserMonitor(data=data)
         
     def load_csv(self, path):
-        df = pd.read_csv(path, 0)
+        df = pd.read_csv(path)
         monitors = []
         for index, row in df.iterrows():
             if row['Type']=='HTTP':
