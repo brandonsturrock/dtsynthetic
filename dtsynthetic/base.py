@@ -1,6 +1,7 @@
 import requests
 import json
 import re
+import pandas as pd
 
 from dtsynthetic.monitors import HTTPMonitor, BrowserMonitor, DraftHTTPMonitor, DraftBrowserMonitor
 
@@ -16,6 +17,41 @@ class SyntheticAPI:
             return DraftHTTPMonitor(data=data, request_data={'tenant' : self.tenant, 'headers' : self.__headers})
         elif data['type'] == 'BROWSER':
             return DraftBrowserMonitor(data=data)
+        
+    def load_csv(self, path):
+        df = pd.read_csv(path, 0)
+        monitors = []
+        for index, row in df.iterrows():
+            if row['Type']=='HTTP':
+                body = {
+                    "name": row['Monitor Name'],
+                    "frequencyMin": row['Frequency'],
+                    "enabled": row['Enabled'],
+                    "type": "HTTP",
+                    "script": {
+                        "version" : '1.0',
+                        "requests": [
+                        {
+                            "description": row['Description'] if 'Description' in df else row['URL'],
+                            "url": row['URL'],
+                            "method": row['Method'],
+                            "requestBody": row['Request Body'] if 'Request Body' in df else '',
+                            "configuration": {
+                                "acceptAnyCertificate": True,
+                                "followRedirects": True
+                            },
+                            "preProcessingScript": "",
+                            "postProcessingScript": ""
+                        }
+                        ]
+                    },
+                    "locations": row['Locations'].split(','),
+                    "tags": [],
+                    "manuallyAssignedApps" : []
+                }
+                monitors.append(DraftHTTPMonitor(data=body, request_data={'tenant' : self.tenant, 'api_key':self.api_key, 'headers' : self.__headers}))
+        return monitors
+
 
     def get_monitor(self, entityId, detailed=False):
         url = self.tenant + f'/api/v1/synthetic/monitors/{entityId}'
