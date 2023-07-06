@@ -22,6 +22,7 @@ class SyntheticAPI:
         df = pd.read_csv(path)
         monitors = []
         for index, row in df.iterrows():
+            print(row['Request Body'])
             if row['Type']=='HTTP':
                 body = {
                     "name": row['Monitor Name'],
@@ -35,7 +36,7 @@ class SyntheticAPI:
                             "description": row['Description'] if 'Description' in df else row['URL'],
                             "url": row['URL'],
                             "method": row['Method'],
-                            "requestBody": row['Request Body'] if 'Request Body' in df else None,
+                            "requestBody": row['Request Body'] if 'Request Body' !='' else None,
                             "configuration": {
                                 "acceptAnyCertificate": True,
                                 "followRedirects": True
@@ -51,7 +52,7 @@ class SyntheticAPI:
                 }
                 if body['script']['requests'][0]['requestBody'] is None:
                     del body['script']['requests'][0]['requestBody']
-                    
+
                 monitors.append(DraftHTTPMonitor(data=body, request_data={'tenant' : self.tenant, 'api_key':self.api_key, 'headers' : self.__headers}))
         return monitors
 
