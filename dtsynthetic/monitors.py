@@ -22,6 +22,7 @@ class DraftHTTPMonitor:
     def data(self):
         x = dict(copy.deepcopy(vars(self)))
         x['script']['requests'] = [y.data() for y in x['script']['requests']]
+        del x['_request_data']
         return x
     
     def create(self):
