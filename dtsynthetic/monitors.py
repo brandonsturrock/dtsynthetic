@@ -122,18 +122,17 @@ class HTTPMonitor:
         self.enabled = False
         return self.update()
     
-    def has_tag(self, tag):
-        if type(tag) == dict:
-            search_key = ''
-            for key in tag:
-                search_key = key
-        elif type(tag) == str:
-            search_key = tag
-
-        for x in self.tags:
-            if search_key == x['key']:
-                return True      
-        return False  
+    def has_tag(self, key, value=None):
+        if not value:
+            for x in self.tags:
+                if key == x['key']:
+                    return True    
+            return False
+        else:
+            for x in self.tags:
+                if key == x['key'] and value == x['value']:
+                    return True    
+            return False              
     
     def add_tag(self, key, value:None, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
@@ -324,18 +323,17 @@ class BrowserMonitor:
             self.tags = data['tags']
             self.is_detailed = True
 
-    def has_tag(self, tag):
-        if type(tag) == dict:
-            search_key = ''
-            for key in tag:
-                search_key = key
-        elif type(tag) == str:
-            search_key = tag
-
-        for x in self.tags:
-            if search_key == x['key']:
-                return True      
-        return False  
+    def has_tag(self, key, value=None):
+        if not value:
+            for x in self.tags:
+                if key == x['key']:
+                    return True    
+            return False
+        else:
+            for x in self.tags:
+                if key == x['key'] and value == x['value']:
+                    return True    
+            return False 
     
     def add_tag(self, key, value:None, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
