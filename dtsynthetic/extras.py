@@ -110,6 +110,7 @@ class HTTPScript:
             'method' : method
         }
         if params:
+            if 'requestBody' in params: new_request['requestBody'] = params['requestBody']
             if 'validation' in params: new_request['validation'] = params['validation']
             if 'configuration' in params: new_request['configuration'] = params['configuration']
             if 'validation' in params: new_request['validation'] = params['validation']
@@ -117,7 +118,7 @@ class HTTPScript:
             if 'postProcessingScript' in params: new_request['postProcessingScript'] = params['postProcessingScript']
         
         self.requests.append(HTTPRequest(new_request))
-        
+
 class BrowserScript:
     def __init__(self, type, version, events):
         self.type = type
