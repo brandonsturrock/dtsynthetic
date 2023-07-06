@@ -159,7 +159,7 @@ class HTTPMonitor:
         if update:
             return self.update()
         
-    def change_tag(self, key, value):
+    def change_tag(self, key, value=None):
         tag = self.__find_tag(key)
         if tag:
             tag['value'] = value
@@ -371,7 +371,7 @@ class BrowserMonitor:
         if update:
             return self.update()
         
-    def change_tag(self, key, value):
+    def change_tag(self, key, value=None):
         tag = self.__find_tag(key)
         if tag:
             tag['value'] = value
