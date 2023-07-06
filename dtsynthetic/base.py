@@ -52,7 +52,7 @@ class SyntheticAPI:
                         ]
                     },
                     "locations": row['Locations'].split(','),
-                    "tags": [],
+                    "tags": [{'key':'brandon_testing'}],
                     "manuallyAssignedApps" : []
                 }
                 if body['script']['requests'][0]['requestBody'] is None:
