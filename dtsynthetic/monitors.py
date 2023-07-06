@@ -16,7 +16,7 @@ class DraftHTTPMonitor:
         if 'anomalyDetection' in data: self.anomalyDetection = data['anomalyDetection']
         if 'manuallyAssignedApps' in data: self.manuallyAssignedApps = data['manuallyAssignedApps']
         else: self.manuallyAssignedApps = []
-        if 'tags' in data: self.frequencyMin = data['tags']
+        if 'tags' in data: self.tags = data['tags']
         else: self.tags = []
     
     def data(self):
