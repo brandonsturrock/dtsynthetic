@@ -134,7 +134,7 @@ class HTTPMonitor:
                     return True    
             return False              
     
-    def add_tag(self, key, value:None, update=False):
+    def add_tag(self, key, value=None, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
 
@@ -335,7 +335,7 @@ class BrowserMonitor:
                     return True    
             return False 
     
-    def add_tag(self, key, value:None, update=False):
+    def add_tag(self, key, value=None, update=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
 
