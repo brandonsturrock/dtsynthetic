@@ -158,7 +158,18 @@ class HTTPMonitor:
                 self.tags.remove(x)
         if update:
             return self.update()
-    
+        
+    def change_tag(self, key, value):
+        tag = self.__find_tag(key)
+        if tag:
+            tag['value'] = value
+
+    def __find_tag(self, key):
+        for x in self.tags:
+            if key == x['key']:
+                return x           
+        return False 
+        
     def execute(self, params={}):
         url = self._request_data['tenant'] + f'/api/v2/synthetic/executions/batch'
         monitor_config = {
@@ -359,3 +370,14 @@ class BrowserMonitor:
                 self.tags.remove(x)
         if update:
             return self.update()
+        
+    def change_tag(self, key, value):
+        tag = self.__find_tag(key)
+        if tag:
+            tag['value'] = value
+
+    def __find_tag(self, key):
+        for x in self.tags:
+            if key == x['key']:
+                return x           
+        return False 
