@@ -53,6 +53,15 @@ class DraftBrowserMonitor:
         x['script']['events'] = [y.data() for y in x['script']['events']]
         return x
     
+    def create(self):
+        url = self._request_data['tenant'] + '/api/v1/synthetic/monitors'
+        body = json.dumps(self.data())
+        result = requests.post(url, data=body, headers=self._request_data['headers'])
+        if result.ok:
+            self.entityId = json.loads(result.content)['entityId']
+            return BrowserMonitor(self.data(), self._request_data, False)
+
+
 class HTTPMonitor:
     def __init__(self, data:dict, request_data, detailed):
         self.__name = data['name']
@@ -95,6 +104,7 @@ class HTTPMonitor:
             self.is_detailed = True
 
     def update(self):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to update a script')
         url = self._request_data['tenant'] + f'/api/v1/synthetic/monitors/{self.entityId}'
         result = requests.put(url, headers = self._request_data['headers'], data = json.dumps(self.data()))
         return_data = {'status' : result.status_code,'entityId' : self.entityId, 'message' : None} if result.status_code == 204 else {'status' : result.status_code, 'entityId' : self.entityId, 'message' : result.content}
@@ -102,18 +112,21 @@ class HTTPMonitor:
         return return_data
     
     def enable(self, update=False):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         if not hasattr(self, 'script'): raise Exception('Call get_details() before attempting to edit a script')
         self.enabled = True
         if update:
             return self.update()
 
     def disable(self, update=False):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         if not hasattr(self, 'script'): raise Exception('Call get_details() before attempting to edit a script')
         self.enabled = False
         if update:
             return self.update()
     
     def add_tag(self, tag, update=False):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
         if type(tag) == dict:
             search_key = ''
@@ -137,6 +150,7 @@ class HTTPMonitor:
             return self.update()
 
     def remove_tag(self, tag_key, update=False):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         for x in self.tags:
             if type(x) == str:
                 if tag_key == x:
@@ -175,7 +189,6 @@ class HTTPMonitor:
         result = requests.post(url, headers = self._request_data['headers'], data = json.dumps(body))
         return json.loads(result.content)
 
-    #OTHER METHODS
     def data(self):
         y = {}
         x = dict(copy.deepcopy(vars(self)))
@@ -216,11 +229,13 @@ class BrowserMonitor:
         return self.__entityId
     
     def enable(self):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         if not hasattr(self, 'script'): raise Exception('Call get_details() before attempting to edit a script')
         self.enabled = True
         return self.update()
 
     def disable(self):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         if not hasattr(self, 'script'): raise Exception('Call get_details() before attempting to edit a script')
         self.enabled = False
         return self.update()
@@ -252,7 +267,6 @@ class BrowserMonitor:
         result = requests.post(url, headers = self._request_data['headers'], data = json.dumps(body))
         return json.loads(result.content)
 
-
     def data(self):
         y = {}
         x = dict(copy.deepcopy(vars(self)))
@@ -283,6 +297,7 @@ class BrowserMonitor:
         else: raise Exception(event)
 
     def update(self):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to update a script')
         url = self._request_data['tenant'] + f'/api/v1/synthetic/monitors/{self.entityId}'
         result = requests.put(url, headers = self._request_data['headers'], data = json.dumps(self.data()))
         return_data = {'status' : result.status_code,'entityId' : self.entityId} if result.status_code == 204 else {'status' : result.status_code, 'entityId' : self.entityId, 'message' : result.content}
@@ -309,3 +324,39 @@ class BrowserMonitor:
             self.keyPerformanceMetrics = data['keyPerformanceMetrics']
             self.tags = data['tags']
             self.is_detailed = True
+
+    def add_tag(self, tag, update=False):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
+        tag_already_exists = False
+        if type(tag) == dict:
+            search_key = ''
+            for key in tag:
+                search_key = key
+        elif type(tag) == str:
+            search_key = tag
+
+        for x in self.tags:
+            if type(x) == str:
+                if search_key == x:
+                    tag_already_exists = True
+            elif type(x) == dict:
+                if search_key in x:
+                    tag_already_exists = True
+
+        if not tag_already_exists:
+            self.tags.append(tag)
+
+        if update:
+            return self.update()
+
+    def remove_tag(self, tag_key, update=False):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
+        for x in self.tags:
+            if type(x) == str:
+                if tag_key == x:
+                    self.tags.remove(x)
+            elif type(x) == dict:
+                if tag_key in x:
+                    self.tags.remove(x)
+        if update:
+            return self.update()
