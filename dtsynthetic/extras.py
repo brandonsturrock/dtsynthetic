@@ -96,12 +96,28 @@ class HTTPScript:
     def __init__(self, version, requests):
         self.version = version
         self.requests = requests
+
     def data(self):
         return {
             'version' : self.version,
             'requests' : [x.data() for x in self.requests]
-        }    
-    
+        }
+
+    def add_request(self, url, description, method, params=None):
+        new_request = {
+            'url' : url,
+            'description' : description,
+            'method' : method
+        }
+        if params:
+            if 'validation' in params: new_request['validation'] = params['validation']
+            if 'configuration' in params: new_request['configuration'] = params['configuration']
+            if 'validation' in params: new_request['validation'] = params['validation']
+            if 'preProcessingScript' in params: new_request['preProcessingScript'] = params['preProcessingScript']
+            if 'postProcessingScript' in params: new_request['postProcessingScript'] = params['postProcessingScript']
+        
+        self.requests.append(HTTPRequest(new_request))
+        
 class BrowserScript:
     def __init__(self, type, version, events):
         self.type = type
