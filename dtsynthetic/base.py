@@ -18,7 +18,7 @@ class SyntheticAPI:
         elif data['type'] == 'BROWSER':
             return DraftBrowserMonitor(data=data)
         
-    def load_simple_http_csv(self, path):
+    def load_simple_http_csv(self, path:str):
         df = pd.read_csv(path)
         monitors = []
         for index, row in df.iterrows():
@@ -69,7 +69,7 @@ class SyntheticAPI:
         
         return monitors
 
-    def get_monitor(self, entityId, detailed=False):
+    def get_monitor(self, entityId:str, detailed:bool=False):
         url = self.tenant + f'/api/v1/synthetic/monitors/{entityId}'
         result = requests.get(url, headers = self.__headers)
         if result.ok:
@@ -86,7 +86,7 @@ class SyntheticAPI:
         else:
             raise Exception("Fetch failed.")
         
-    def update(self, monitors: list):
+    def update(self, monitors:list):
         success = []
         failure = []
         if not monitors: return
@@ -103,7 +103,7 @@ class SyntheticAPI:
             'failure' : failure
         }
 
-    def get_monitors(self, params = {}, detailed=False):
+    def get_monitors(self, params:dict={}, detailed:bool=False):
         url = self.tenant + '/api/v1/synthetic/monitors'
 
         if params:
@@ -136,49 +136,49 @@ class SyntheticAPI:
         else:
             raise Exception("Fetch failed.")
         
-    def __handle_management_zone(self, managementZone):
+    def __handle_management_zone(self, managementZone:int):
         query_string = ''
         if type(managementZone) != int: raise Exception("Invalid managementZone parameter.")
         query_string = query_string + 'managementZone=' + str(managementZone) + '&'
 
         return query_string    
         
-    def __handle_type(self, xtype):
+    def __handle_type(self, xtype:str):
         query_string = ''
         if type(xtype) != str: raise Exception("Invalid type parameter.")
         query_string = query_string + 'type=' + xtype + '&'
 
         return query_string
     
-    def __handle_credential_id(self, credentialId):
+    def __handle_credential_id(self, credentialId:str):
         query_string = ''
         if type(credentialId) != str: raise Exception("Invalid credentialId parameter.")
         query_string = query_string + 'credentialId=' + credentialId + '&'
 
         return query_string
 
-    def __handle_credential_owner(self, credentialOwner):
+    def __handle_credential_owner(self, credentialOwner:str):
         query_string = ''
         if type(credentialOwner) != str: raise Exception("Invalid credentialOwner parameter.")
         query_string = query_string + 'credentialOwner=' + credentialOwner + '&'
 
         return query_string
     
-    def __handle_enabled(self, enabled):
+    def __handle_enabled(self, enabled:bool):
         query_string = ''
         if type(enabled) != bool: raise Exception("Invalid enabled parameter.")
         query_string = query_string + 'enabled=' + str(enabled) + '&'
 
         return query_string
     
-    def __handle_location(self, location):
+    def __handle_location(self, location:str):
         query_string = ''
         if type(location) != str: raise Exception("Invalid locations parameter.")
         query_string = query_string + 'location=' + location + '&'
 
         return query_string
 
-    def __handle_assigned_apps(self, assigned_apps):
+    def __handle_assigned_apps(self, assigned_apps:list):
         query_string = ''
         
         if type(assigned_apps) != list: raise Exception("Invalid assignedApps parameter.")
@@ -189,7 +189,7 @@ class SyntheticAPI:
 
         return query_string
 
-    def __handle_tags(self, tags):
+    def __handle_tags(self, tags:list):
         query_string = ''
         
         if type(tags) != list: raise Exception("Invalid tags parameter.")
@@ -204,7 +204,7 @@ class SyntheticAPI:
 
         return query_string
    
-    def __validate_url(self, tenant):
+    def __validate_url(self, tenant:str):
         result = re.search('^https://',tenant)
         if result:
             if tenant[-1] == '/':

@@ -34,13 +34,14 @@ class DraftHTTPMonitor:
             return HTTPMonitor(self.data(), self._request_data, False)
 
 class DraftBrowserMonitor:
-    def __init__(self, data, request_data):
+    def __init__(self, data:dict, request_data:dict):
         self.name = data['name']
         self.frequencyMin = data['frequencyMin'] if 'frequencyMin' in data else None
         self.enabled = data['enabled']
         self.type = data['type']
         self.script = {'type' : data['script']['type'], 'version' : data['script']['version'], 'events' : [self.__classifyEvent(x) for x in data['script']['events']]}
         self.locations = data['locations']
+        self._request_data = request_data
         if 'anomalyDetection' in data: self.anomalyDetection = data['anomalyDetection']
         if 'keyPerformanceMetrics' in data: self.keyPerformanceMetrics = data['keyPerformanceMetrics']
         else: self.keyPerformanceMetrics = {"loadActionKpm": "VISUALLY_COMPLETE","xhrActionKpm": "VISUALLY_COMPLETE"}
@@ -52,6 +53,7 @@ class DraftBrowserMonitor:
     def data(self):
         x = dict(copy.deepcopy(vars(self)))
         x['script']['events'] = [y.data() for y in x['script']['events']]
+        del x['_request_data']
         return x
     
     def create(self):
@@ -63,7 +65,7 @@ class DraftBrowserMonitor:
             return BrowserMonitor(self.data(), self._request_data, False)
 
 class HTTPMonitor:
-    def __init__(self, data:dict, request_data, detailed):
+    def __init__(self, data:dict, request_data:dict, detailed:bool):
         self.__name = data['name']
         self.__entityId = data['entityId']
         self.enabled = data['enabled']
@@ -123,7 +125,7 @@ class HTTPMonitor:
         self.enabled = False
         return self.update()
     
-    def has_tag(self, key, value=None):
+    def has_tag(self, key:str, value:str=None):
         if not value:
             for x in self.tags:
                 if key == x['key']:
@@ -135,7 +137,7 @@ class HTTPMonitor:
                     return True    
             return False              
     
-    def add_tag(self, key, value=None, update=False):
+    def add_tag(self, key:str, value:str=None, update:bool=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
 
@@ -151,7 +153,7 @@ class HTTPMonitor:
         if update:
             return self.update()
 
-    def remove_tag(self, key, update=False):
+    def remove_tag(self, key:str, update:bool=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
 
         for x in self.tags:
@@ -160,18 +162,18 @@ class HTTPMonitor:
         if update:
             return self.update()
         
-    def change_tag(self, key, value=None):
+    def change_tag(self, key:str, value:str=None):
         tag = self.__find_tag(key)
         if tag:
             tag['value'] = value
 
-    def __find_tag(self, key):
+    def __find_tag(self, key:str):
         for x in self.tags:
             if key == x['key']:
                 return x           
         return False 
         
-    def execute(self, params={}):
+    def execute(self, params:dict={}):
         url = self._request_data['tenant'] + f'/api/v2/synthetic/executions/batch'
         monitor_config = {
                 'monitorId' : self.entityId,
@@ -213,7 +215,7 @@ class HTTPMonitor:
         return y
        
 class BrowserMonitor:
-    def __init__(self, data, request_data, detailed):
+    def __init__(self, data:dict, request_data:dict, detailed:bool):
         self.__name = data['name']
         self.__entityId = data['entityId']
         self.enabled = data['enabled']
@@ -250,7 +252,7 @@ class BrowserMonitor:
         self.enabled = False
         return self.update()
     
-    def execute(self, params={}):
+    def execute(self, params:dict={}):
         url = self._request_data['tenant'] + f'/api/v2/synthetic/executions/batch'
         monitor_config = {
                 'monitorId' : self.entityId,
@@ -290,7 +292,7 @@ class BrowserMonitor:
         y.update(x)
         return y
     
-    def __classifyEvent(self, event):
+    def __classifyEvent(self, event:dict):
 
         if event['type'] == 'navigate':
             return NavigateEvent(event)
@@ -335,7 +337,7 @@ class BrowserMonitor:
             self.tags = data['tags']
             self.is_detailed = True
 
-    def has_tag(self, key, value=None):
+    def has_tag(self, key:str, value:str=None):
         if not value:
             for x in self.tags:
                 if key == x['key']:
@@ -347,7 +349,7 @@ class BrowserMonitor:
                     return True    
             return False 
     
-    def add_tag(self, key, value=None, update=False):
+    def add_tag(self, key:str, value:str=None, update:bool=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
 
@@ -363,7 +365,7 @@ class BrowserMonitor:
         if update:
             return self.update()
 
-    def remove_tag(self, key, update=False):
+    def remove_tag(self, key:str, update:str=False):
         if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
 
         for x in self.tags:
@@ -372,12 +374,12 @@ class BrowserMonitor:
         if update:
             return self.update()
         
-    def change_tag(self, key, value=None):
+    def change_tag(self, key:str, value:str=None):
         tag = self.__find_tag(key)
         if tag:
             tag['value'] = value
 
-    def __find_tag(self, key):
+    def __find_tag(self, key:str):
         for x in self.tags:
             if key == x['key']:
                 return x           
