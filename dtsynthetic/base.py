@@ -18,7 +18,7 @@ class SyntheticAPI:
         elif data['type'] == 'BROWSER':
             return DraftBrowserMonitor(data=data)
         
-    def load_csv(self, path):
+    def load_simple_http_csv(self, path):
         df = pd.read_csv(path)
         monitors = []
         for index, row in df.iterrows():
@@ -66,8 +66,8 @@ class SyntheticAPI:
                     del body['script']['requests'][0]['requestBody']
 
                 monitors.append(DraftHTTPMonitor(data=body, request_data={'tenant' : self.tenant, 'api_key':self.api_key, 'headers' : self.__headers}))
+        
         return monitors
-
 
     def get_monitor(self, entityId, detailed=False):
         url = self.tenant + f'/api/v1/synthetic/monitors/{entityId}'
