@@ -7,6 +7,13 @@ from dtsynthetic.monitors import HTTPMonitor, BrowserMonitor, DraftHTTPMonitor, 
 
 class SyntheticAPI:
 
+    """This class is used to interact directly with the Dynatrace Synthetics API by querying existing monitors, creating new monitors, and bulk updating edited monitors
+    :param tenant: A valid url for the Dynatrace tenant you wish to interact with
+    :type tenant: str
+    :param api_key: A valid access token for the Dynatrace tenant you wish to interact with, with synthetic v1 and v2 scopes
+    :type tenant: str
+    """
+
     def __init__(self, tenant:str, api_key:str):
         self.tenant = self.__validate_url(tenant)
         self.api_key = api_key
