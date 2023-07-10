@@ -26,7 +26,7 @@ class SyntheticAPI:
             return DraftBrowserMonitor(data=data)
         
     def load_simple_http_csv(self, path:str):
-        df = pd.read_csv(path)
+        df = pd.read_csv(path, low_memory=False)
         monitors = []
         for index, row in df.iterrows():
             body_check = row['Request Body']
