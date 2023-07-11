@@ -91,7 +91,7 @@ class SyntheticAPI:
             return new_monitor
         
         else:
-            raise Exception("Fetch failed.")
+            raise Exception(result.content)
         
     def update(self, monitors:list):
         success = []
