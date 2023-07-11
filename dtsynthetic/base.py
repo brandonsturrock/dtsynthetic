@@ -23,7 +23,7 @@ class SyntheticAPI:
         if data['type'] == 'HTTP':
             return DraftHTTPMonitor(data=data, request_data={'tenant' : self.tenant, 'headers' : self.__headers})
         elif data['type'] == 'BROWSER':
-            return DraftBrowserMonitor(data=data)
+            return DraftBrowserMonitor(data=data, request_data={'tenant' : self.tenant, 'headers' : self.__headers})
         
     def load_simple_http_csv(self, path:str):
         df = pd.read_csv(path, low_memory=False)
