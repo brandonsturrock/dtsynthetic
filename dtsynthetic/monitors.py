@@ -56,6 +56,22 @@ class DraftBrowserMonitor:
         del x['_request_data']
         return x
     
+    def __classifyEvent(self, event:dict):
+
+        if event['type'] == 'navigate':
+            return NavigateEvent(event)
+        elif event['type'] == 'click' or event['type'] == 'tap':
+            return InteractionEvent(event)
+        elif event['type'] == 'javascript':
+            return JavaScriptEvent(event)
+        elif event['type'] == 'cookie':
+            return CookieEvent(event)
+        elif event['type'] == 'keystrokes':
+            return KeystrokesEvent(event)
+        elif event['type'] == 'selectOption':
+            return SelectOptionEvent(event)
+        else: raise Exception(event)
+    
     def create(self):
         url = self._request_data['tenant'] + '/api/v1/synthetic/monitors'
         body = json.dumps(self.data())
