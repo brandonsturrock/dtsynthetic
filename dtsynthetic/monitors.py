@@ -18,7 +18,21 @@ class DraftHTTPMonitor:
         else: self.manuallyAssignedApps = []
         if 'tags' in data: self.tags = data['tags']
         else: self.tags = []
-    
+
+    def add_tag(self, key:str, value:str=None):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
+        tag_already_exists = False
+
+        for x in self.tags:
+            if key == x['key']:
+                tag_already_exists = True
+
+        if not tag_already_exists and value:
+            self.tags.append({'key' : key, 'value' : value})
+        elif not tag_already_exists:
+            self.tags.append({'key' : key})
+   
+        
     def data(self):
         x = dict(copy.deepcopy(vars(self)))
         x['script']['requests'] = [y.data() for y in x['script']['requests']]
@@ -50,6 +64,19 @@ class DraftBrowserMonitor:
         if 'configuration' in data['script']: self.script['configuration'] = data['script']['configuration']
         else: self.script['configuration'] = {}
 
+    def add_tag(self, key:str, value:str=None):
+        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
+        tag_already_exists = False
+
+        for x in self.tags:
+            if key == x['key']:
+                tag_already_exists = True
+
+        if not tag_already_exists and value:
+            self.tags.append({'key' : key, 'value' : value})
+        elif not tag_already_exists:
+            self.tags.append({'key' : key})
+            
     def data(self):
         x = dict(copy.deepcopy(vars(self)))
         x['script']['events'] = [y.data() for y in x['script']['events']]
