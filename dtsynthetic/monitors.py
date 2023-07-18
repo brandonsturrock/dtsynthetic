@@ -20,7 +20,6 @@ class DraftHTTPMonitor:
         else: self.tags = []
 
     def add_tag(self, key:str, value:str=None):
-        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
 
         for x in self.tags:
@@ -65,7 +64,6 @@ class DraftBrowserMonitor:
         else: self.script['configuration'] = {}
 
     def add_tag(self, key:str, value:str=None):
-        if not self.is_detailed: raise Exception('Call get_details() before attempting to edit a script')
         tag_already_exists = False
 
         for x in self.tags:
@@ -76,7 +74,7 @@ class DraftBrowserMonitor:
             self.tags.append({'key' : key, 'value' : value})
         elif not tag_already_exists:
             self.tags.append({'key' : key})
-            
+
     def data(self):
         x = dict(copy.deepcopy(vars(self)))
         x['script']['events'] = [y.data() for y in x['script']['events']]
