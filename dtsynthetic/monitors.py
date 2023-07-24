@@ -45,6 +45,8 @@ class DraftHTTPMonitor:
         if result.ok:
             self.entityId = json.loads(result.content)['entityId']
             return HTTPMonitor(self.data(), self._request_data, False)
+        else:
+            return result
 
 class DraftBrowserMonitor:
     def __init__(self, data:dict, request_data:dict):
@@ -104,6 +106,8 @@ class DraftBrowserMonitor:
         if result.ok:
             self.entityId = json.loads(result.content)['entityId']
             return BrowserMonitor(self.data(), self._request_data, False)
+        else:
+            return result
 
 class HTTPMonitor:
     def __init__(self, data:dict, request_data:dict, detailed:bool):
