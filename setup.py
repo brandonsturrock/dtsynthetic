@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
   name = 'dtsynthetic',
   packages = ['dtsynthetic'],
-  version = '0.2.42',
+  version = '0.2.43',
   description = 'Wrapper for the Dynatrace Synthetic API',
   author = 'Brandon Sturrock',
   author_email = 'brandon.sturrock@dynatrace.com',
